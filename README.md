@@ -3,6 +3,7 @@
 Crie uma landing page premium e responsiva de alta conversão para consultor/licenciado iGreen Energy.
 
 Principais requisitos:
+
 1. Identidade visual dark premium: fundo preto/grafite, branco de contraste, verde elétrico estilo iGreen, gradientes sutis, glows discretos e tipografia moderna (estilo fintech/energy-tech de performance).
 2. Header minimalista sticky com logo/identificação e CTA "SIMULAR ECONOMIA" (sem menu de navegação institucional).
 3. Hero Section com headline forte sobre conta de luz, subheadline destacando energia sustentável sem placas nem investimento, CTA principal "CALCULAR MINHA ECONOMIA" e micro-benefícios.
@@ -27,18 +28,6 @@ Principais requisitos:
 15. CTA Final com visual marcante e CTA fixo inferior (sticky) para mobile com ícone de raio.
 16. Estrutura centralizada de eventos de tracking/analytics (PageView, StartQuiz, QuizSteps, Lead, WhatsAppClick, SimulatorInteraction).
 17. Copy cuidadoso com termos de conformidade ("economia potencial", "até 20%", "estimativa").
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://green-spark-leap.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5b5a4065-bdbd-4e85-8368-41a54597fc9b).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 

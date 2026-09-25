@@ -30,15 +30,21 @@ const FAIXAS = [
 ];
 
 const ANALISES = [
-  "Verificando disponibilidade de usina na sua região",
-  "Consultando regras da sua distribuidora",
-  "Cruzando seu perfil de consumo",
-  "Calculando economia potencial",
+  "Organizando os dados da sua instalação",
+  "Registrando sua distribuidora",
+  "Calculando uma estimativa de economia",
+  "Preparando as informações para o Laudemir",
 ];
 
 const TOTAL_STEPS = 6;
 
-export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+export function QuizModal({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
   const [step, setStep] = useState(1);
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [conta, setConta] = useState<number | null>(null);
@@ -50,7 +56,7 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
   const [fone, setFone] = useState("");
   const [aceite, setAceite] = useState(false);
   const [analiseIdx, setAnaliseIdx] = useState(0);
-  const [aprovado, setAprovado] = useState(false);
+  const [analisePronta, setAnalisePronta] = useState(false);
 
   const economiaMes = useMemo(() => Math.round((conta ?? 0) * MAX_ECONOMIA), [conta]);
 
@@ -58,17 +64,17 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
     if (!open) return;
     setStep(1);
     setAnaliseIdx(0);
-    setAprovado(false);
+    setAnalisePronta(false);
     track("StartQuiz");
   }, [open]);
 
   useEffect(() => {
     if (step !== 5) return;
     setAnaliseIdx(0);
-    setAprovado(false);
+    setAnalisePronta(false);
     const timers: ReturnType<typeof setTimeout>[] = [];
     ANALISES.forEach((_, i) => timers.push(setTimeout(() => setAnaliseIdx(i + 1), 750 * (i + 1))));
-    timers.push(setTimeout(() => setAprovado(true), 750 * ANALISES.length + 500));
+    timers.push(setTimeout(() => setAnalisePronta(true), 750 * ANALISES.length + 500));
     return () => timers.forEach(clearTimeout);
   }, [step]);
 
@@ -199,7 +205,9 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                 ))}
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Ou informe o valor exato (R$)</label>
+                <label className="text-xs text-muted-foreground">
+                  Ou informe o valor exato (R$)
+                </label>
                 <Input
                   inputMode="numeric"
                   placeholder="Ex.: 480"
@@ -279,16 +287,16 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                 className="w-full"
                 size="lg"
               >
-                Verificar elegibilidade
+                Preparar estimativa
               </Button>
             </>
           )}
 
           {step === 5 && (
             <div className="py-2">
-              {!aprovado ? (
+              {!analisePronta ? (
                 <>
-                  <h3 className="text-xl font-semibold">Analisando sua elegibilidade…</h3>
+                  <h3 className="text-xl font-semibold">Preparando sua pré-análise…</h3>
                   <ul className="mt-5 space-y-3">
                     {ANALISES.map((a, i) => (
                       <li key={a} className="flex items-center gap-3 text-sm">
@@ -297,7 +305,9 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                         ) : (
                           <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />
                         )}
-                        <span className={i < analiseIdx ? "text-foreground" : "text-muted-foreground"}>
+                        <span
+                          className={i < analiseIdx ? "text-foreground" : "text-muted-foreground"}
+                        >
                           {a}
                         </span>
                       </li>
@@ -309,9 +319,10 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                   <div className="glow-brand mx-auto grid size-16 place-items-center rounded-full bg-brand/15">
                     <ShieldCheck className="size-8 text-brand" />
                   </div>
-                  <h3 className="mt-4 text-2xl font-semibold">Perfil elegível!</h3>
+                  <h3 className="mt-4 text-2xl font-semibold">Pré-análise pronta</h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {cidade}/{uf} tem usina disponível para o perfil {perfil?.toLowerCase()}.
+                    O Laudemir confirmará a elegibilidade e a disponibilidade para {cidade}/{uf}{" "}
+                    após analisar sua conta.
                   </p>
                   <div className="surface-card mt-4 rounded-xl p-4">
                     <p className="text-xs text-muted-foreground">Economia potencial estimada</p>
@@ -323,7 +334,7 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                     </p>
                   </div>
                   <Button className="mt-4 w-full" size="lg" onClick={() => go(6)}>
-                    Receber minha análise
+                    Falar com o Laudemir
                   </Button>
                 </div>
               )}
@@ -332,8 +343,12 @@ export function QuizModal({ open, onOpenChange }: { open: boolean; onOpenChange:
 
           {step === 6 && (
             <>
-              <h3 className="text-xl font-semibold">Para onde enviamos sua análise?</h3>
-              <Input placeholder="Seu nome completo" value={nome} onChange={(e) => setNome(e.target.value)} />
+              <h3 className="text-xl font-semibold">Envie sua pré-análise pelo WhatsApp</h3>
+              <Input
+                placeholder="Seu nome completo"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+              />
               <Input
                 inputMode="tel"
                 placeholder="(11) 90000-0000"

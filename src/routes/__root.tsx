@@ -77,16 +77,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "iGreen Energy — Economize até 20% na conta de luz" },
+      { title: "Laudemir Lemes | Soluções iGreen Energy" },
       {
         name: "description",
         content:
-          "Energia limpa por assinatura, sem placas e sem investimento. Simule sua economia potencial.",
+          "Conheça as soluções iGreen em energia, telefonia e seguro veicular com o consultor Laudemir Lemes.",
       },
-      { property: "og:title", content: "iGreen Energy — Economize até 20% na conta de luz" },
+      { property: "og:title", content: "Laudemir Lemes | Soluções iGreen Energy" },
       {
         property: "og:description",
-        content: "Energia limpa por assinatura, sem placas e sem investimento.",
+        content:
+          "Economia na conta de luz e outras soluções iGreen com atendimento direto do Laudemir.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

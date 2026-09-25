@@ -9,8 +9,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { QuizModal } from "@/components/QuizModal";
 import { Simulator } from "@/components/Simulator";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { track } from "@/lib/tracking";
-import { CONSULTANT, CONSULTANT_WHATSAPP, FAQ, LINKS, NUMEROS } from "@/lib/site-config";
+import {
+  CONSULTANT,
+  FAQ,
+  LINKS,
+  NUMEROS,
+  SOLUTIONS,
+  WHATSAPP_MESSAGES,
+  whatsappHref,
+} from "@/lib/site-config";
 import {
   ArrowRight,
   BadgeCheck,
@@ -19,11 +28,7 @@ import {
   ExternalLink,
   FileSignature,
   Mail,
-  MessageCircle,
-  ShieldCheck,
   Sparkles,
-  Smartphone,
-  Sun,
   TrendingDown,
   UserPlus,
   Wallet,
@@ -32,23 +37,6 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Laudemir Lemes | Soluções iGreen Energy" },
-      {
-        name: "description",
-        content:
-          "Fale com Laudemir Lemes sobre economia na conta de luz, energia solar, telefonia, seguro veicular e como se tornar licenciado iGreen.",
-      },
-      { property: "og:title", content: "Laudemir Lemes | Soluções iGreen Energy" },
-      {
-        property: "og:description",
-        content: "Conheça as soluções iGreen com atendimento direto do consultor Laudemir Lemes.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
   component: Landing,
 });
 
@@ -57,6 +45,24 @@ function Landing() {
 
   useEffect(() => {
     track("PageView");
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.IntersectionObserver
+    )
+      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("section-enter");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08 },
+    );
+    document.querySelectorAll(".section-band").forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   const abrir = (origem: string) => {
@@ -64,14 +70,8 @@ function Landing() {
     setOpen(true);
   };
 
-  const whatsHref = `https://wa.me/${CONSULTANT_WHATSAPP}?text=${encodeURIComponent(
-    "Olá, Laudemir! Vi seu site e gostaria de conhecer as soluções iGreen para mim.",
-  )}`;
-
-  const contactHref = (assunto: string) =>
-    `https://wa.me/${CONSULTANT_WHATSAPP}?text=${encodeURIComponent(
-      `Olá, Laudemir! Gostaria de saber mais sobre ${assunto}.`,
-    )}`;
+  const whatsHref = whatsappHref(WHATSAPP_MESSAGES.geral);
+  const opportunityHref = whatsappHref(WHATSAPP_MESSAGES.oportunidade);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -102,43 +102,109 @@ function Landing() {
       </header>
 
       {/* HERO */}
-      <section className="grid-glow relative overflow-hidden">
-        <div className="mx-auto max-w-6xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24">
+      <section className="hero-surface relative overflow-hidden">
+        <div className="mx-auto max-w-6xl px-4 pt-8 pb-6 sm:px-6 sm:pt-14 sm:pb-12">
           <p className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/10 px-3 py-1 text-xs text-brand">
             <Sparkles className="size-3.5" /> Energia limpa por assinatura
           </p>
-          <h1 className="mt-6 max-w-3xl text-4xl leading-[1.05] font-bold sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl text-4xl leading-[1.05] font-bold sm:text-6xl">
             Sua conta de luz pode cair{" "}
             <span className="text-gradient-brand">até 20% com energia limpa</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Energia sustentável sem instalar placas, sem obra e sem investimento. Você continua com
-            a mesma distribuidora — muda apenas o valor que você paga.
+          <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
+            Conheça a Conexão Green: energia limpa por assinatura, sem instalar placas no imóvel. O
+            fornecimento continua pela distribuidora local; a economia depende da elegibilidade.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button size="lg" className="h-13 text-base" onClick={() => abrir("hero")}>
               Calcular minha economia <ArrowRight className="size-4" />
             </Button>
-            <span className="text-xs text-muted-foreground">
-              Leva 1 minuto • sem compromisso • estimativa gratuita
-            </span>
+            <a
+              href="#oportunidade"
+              className="inline-flex min-h-12 items-center gap-2 rounded-md border border-brand/40 px-5 text-sm font-semibold text-foreground transition-colors hover:border-brand hover:bg-brand/10 focus-visible:outline-2 focus-visible:outline-brand"
+            >
+              Conhecer a oportunidade <ArrowRight className="size-4" />
+            </a>
           </div>
 
-          <ul className="mt-10 grid gap-3 sm:grid-cols-3">
-            {["Sem placas solares", "Sem taxa de adesão", "Mesma distribuidora e mesma rede"].map(
-              (b) => (
-                <li key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <CheckCircle2 className="size-4 shrink-0 text-brand" /> {b}
-                </li>
-              ),
-            )}
+          <p className="mt-3 text-xs text-muted-foreground">
+            Leva cerca de 1 minuto • simulação sem compromisso
+          </p>
+
+          <ul className="mt-4 grid gap-3 sm:mt-6 sm:grid-cols-3">
+            {[
+              "Sem placas solares no imóvel",
+              "Sem obra na instalação",
+              "Mesma distribuidora e mesma rede",
+            ].map((b) => (
+              <li key={b} className="flex items-center gap-2 text-sm text-muted-foreground">
+                <CheckCircle2 className="size-4 shrink-0 text-brand" /> {b}
+              </li>
+            ))}
           </ul>
         </div>
       </section>
 
+      {/* SOLUÇÕES: acesso antecipado aos quatro caminhos */}
+      <Section
+        id="solucoes"
+        tone="alternate"
+        eyebrow="Soluções iGreen"
+        title="Encontre a solução certa para você"
+      >
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SOLUTIONS.map((service) => (
+            <article
+              key={service.id}
+              className="product-card flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-card"
+            >
+              <div className="product-image relative flex aspect-[4/3] items-center justify-center border-b border-border bg-surface px-5 text-center">
+                {service.imageSrc ? (
+                  <img
+                    src={service.imageSrc}
+                    alt={service.name}
+                    loading="lazy"
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                ) : (
+                  <span className="text-lg font-semibold text-foreground">{service.name}</span>
+                )}
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="text-base font-semibold">{service.name}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
+                <p className="mt-3 text-xs text-muted-foreground">{service.audience}</p>
+                <div className="mt-auto pt-5">
+                  <Button className="w-full" asChild>
+                    <a
+                      href={whatsappHref(service.message)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => track("WhatsAppClick", { origem: `produto_${service.id}` })}
+                    >
+                      <WhatsAppIcon className="size-4" /> {service.contactLabel}
+                    </a>
+                  </Button>
+                  {service.directHref && (
+                    <a
+                      href={service.directHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex min-h-10 items-center gap-1 text-sm font-semibold text-brand hover:underline focus-visible:underline"
+                    >
+                      {service.directLabel} <ExternalLink className="size-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
+
       {/* DOR */}
-      <Section eyebrow="O problema" title="Todo mês a mesma conta — e nada muda">
+      <Section eyebrow="Sua conta de luz" title="Todo mês a mesma conta — e nada muda">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-destructive/25 bg-destructive/5 p-6">
             <p className="flex items-center gap-2 font-semibold text-destructive">
@@ -149,7 +215,7 @@ function Landing() {
                 "Tarifa sobe todo ano e você absorve o aumento",
                 "Bandeiras tarifárias pesando na fatura",
                 "Dinheiro que sai e nunca mais volta",
-                "Nenhum benefício por ser cliente antigo",
+                "Vale conferir se existe uma alternativa para o seu perfil",
               ].map((i) => (
                 <li key={i} className="flex gap-2">
                   <X className="mt-0.5 size-4 shrink-0 text-destructive" /> {i}
@@ -197,7 +263,7 @@ function Landing() {
             {
               i: FileSignature,
               t: "Adesão digital",
-              d: "Contrato 100% online, sem taxa e sem visita.",
+              d: "Conheça a proposta e confirme as condições antes de aderir.",
             },
             {
               i: Wallet,
@@ -216,7 +282,12 @@ function Landing() {
       </Section>
 
       {/* SIMULADOR */}
-      <Section eyebrow="Simulador" title="Arraste e veja quanto pode economizar">
+      <Section
+        id="simulador"
+        tone="alternate"
+        eyebrow="Simulador"
+        title="Arraste e veja quanto pode economizar"
+      >
         <Simulator onCta={() => abrir("simulador")} />
       </Section>
 
@@ -242,8 +313,12 @@ function Landing() {
       </Section>
 
       {/* NÚMEROS */}
-      <Section eyebrow="Autoridade" title="Uma operação de energia com escala nacional">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Section
+        tone="alternate"
+        eyebrow="iGreen Energy"
+        title="Uma operação de energia com escala nacional"
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
           {NUMEROS.map((n) => (
             <div key={n.label} className="surface-card rounded-2xl p-6 text-center">
               <p className="text-3xl font-bold text-gradient-brand">{n.valor}</p>
@@ -252,7 +327,7 @@ function Landing() {
           ))}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Dados da{" "}
+          Números informados no{" "}
           <a
             href={LINKS.oficial}
             target="_blank"
@@ -261,7 +336,7 @@ function Landing() {
           >
             iGreen Energy
           </a>
-          .
+          ; sujeitos a atualização pela empresa.
         </p>
       </Section>
 
@@ -269,9 +344,9 @@ function Landing() {
       <Section eyebrow="Argumento financeiro" title="Dinheiro que não volta">
         <div className="surface-card rounded-2xl p-6 sm:p-9">
           <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
-            Cada mês sem desconto é um valor que sai da sua conta e não retorna de nenhuma forma.
-            Uma economia potencial de R$ 120 por mês vira R$ 1.440 em um ano e R$ 7.200 em cinco
-            anos — o mesmo consumo, só que mais barato.
+            O simulador mostra o potencial de economia a partir da sua conta de luz. Os valores
+            exibidos são estimativas, não descontos garantidos; o Laudemir pode verificar a
+            disponibilidade e as condições para o seu perfil.
           </p>
           <Button size="lg" className="mt-6" onClick={() => abrir("financeiro")}>
             Parar de perder dinheiro
@@ -280,7 +355,7 @@ function Landing() {
       </Section>
 
       {/* CONSULTOR */}
-      <Section eyebrow="Seu consultor" title="Fale diretamente com o Laudemir">
+      <Section tone="alternate" eyebrow="Seu consultor" title="Fale diretamente com o Laudemir">
         <div className="surface-card grid gap-6 rounded-2xl p-6 sm:p-9 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[360px_minmax(0,1fr)]">
           <img
             src={CONSULTANT.foto}
@@ -310,7 +385,7 @@ function Landing() {
                   rel="noopener noreferrer"
                   onClick={() => track("WhatsAppClick", { origem: "consultor" })}
                 >
-                  <MessageCircle /> Falar no WhatsApp
+                  <WhatsAppIcon className="size-4" /> Falar no WhatsApp
                 </a>
               </Button>
             </div>
@@ -318,85 +393,40 @@ function Landing() {
         </div>
       </Section>
 
-      {/* SOLUÇÕES */}
-      <Section eyebrow="Outras soluções" title="A iGreen vai além da conta de luz">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            {
-              icon: Zap,
-              title: "Conexão Green",
-              description:
-                "Energia por assinatura para residências e comércios, sem instalar placas.",
-              action: "Fazer adesão",
-              href: LINKS.green,
-            },
-            {
-              icon: Sun,
-              title: "Energia solar com placas",
-              description: "Projetos de geração própria e modalidades com instalação de painéis.",
-              action: "Consultar opções",
-              href: contactHref("energia solar com placas"),
-            },
-            {
-              icon: Smartphone,
-              title: "iGreen Telecom",
-              description: "Planos de telefonia e portabilidade com opção de eSIM.",
-              action: "Conhecer telecom",
-              href: LINKS.telecom,
-            },
-            {
-              icon: ShieldCheck,
-              title: "Seguro veicular",
-              description: "Solicite uma cotação e conheça a proteção disponível para seu veículo.",
-              action: "Cotar seguro",
-              href: LINKS.seguros,
-            },
-          ].map((service) => (
-            <article key={service.title} className="surface-card flex flex-col rounded-2xl p-6">
-              <service.icon className="size-6 text-brand" />
-              <h3 className="mt-3 text-base font-semibold">{service.title}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{service.description}</p>
-              <a
-                href={service.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline focus-visible:underline"
-                onClick={() =>
-                  service.href.includes("wa.me") &&
-                  track("WhatsAppClick", { origem: "energia_solar" })
-                }
-              >
-                {service.action} <ExternalLink className="size-4" />
-              </a>
-            </article>
-          ))}
-        </div>
-        <div className="surface-card mt-4 flex flex-col gap-5 rounded-2xl p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+      {/* OPORTUNIDADE */}
+      <Section
+        id="oportunidade"
+        tone="alternate"
+        eyebrow="Oportunidade iGreen"
+        title="Quer trabalhar com as soluções iGreen, como o Laudemir?"
+      >
+        <div className="opportunity-panel flex flex-col gap-5 rounded-lg border border-brand/25 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 text-brand">
               <UserPlus className="size-5" />{" "}
-              <span className="text-xs font-semibold uppercase">Oportunidade iGreen</span>
+              <span className="text-xs font-semibold uppercase">Atuação licenciada</span>
             </div>
-            <h3 className="mt-2 text-xl font-semibold">Quer se tornar um licenciado?</h3>
+            <h3 className="mt-2 text-xl font-semibold">Conheça o modelo de licenciamento</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Conheça a proposta de licenciamento e as condições oficiais antes de se cadastrar. O
-              Laudemir pode tirar suas dúvidas.
+              Existe uma oportunidade de atuação como licenciado iGreen. Converse com o Laudemir
+              para entender os requisitos, o funcionamento e as condições oficiais antes de se
+              cadastrar.
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-3">
-            <Button size="lg" asChild>
-              <a href={LINKS.licenciado} target="_blank" rel="noopener noreferrer">
-                Quero ser licenciado <ExternalLink />
-              </a>
-            </Button>
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" className="w-full sm:w-auto" asChild>
               <a
-                href={contactHref("o licenciamento iGreen")}
+                href={opportunityHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("WhatsAppClick", { origem: "licenciamento" })}
               >
-                <MessageCircle /> Tirar dúvidas
+                <WhatsAppIcon className="size-4" /> Falar sobre licenciamento
+              </a>
+            </Button>
+            <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+              <a href={LINKS.licenciado} target="_blank" rel="noopener noreferrer">
+                Ver cadastro oficial <ExternalLink />
               </a>
             </Button>
           </div>
@@ -406,7 +436,7 @@ function Landing() {
           <h3 className="mt-2 text-xl font-semibold">Conheça a oportunidade de licenciamento</h3>
           <p className="mt-2 text-sm text-muted-foreground">
             Assista à apresentação sobre o modelo de atuação e converse com o Laudemir para tirar
-            suas dúvidas.
+            suas dúvidas. Licenciado é a nomenclatura usada pela iGreen para essa oportunidade.
           </p>
           <video
             controls
@@ -439,7 +469,7 @@ function Landing() {
       </Section>
 
       {/* CTA FINAL */}
-      <section className="grid-glow border-t border-border/60">
+      <section className="hero-surface border-t border-border/60">
         <div className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
           <h2 className="mx-auto max-w-2xl text-3xl font-bold sm:text-5xl">
             Descubra em 1 minuto quanto sua conta pode{" "}
@@ -454,7 +484,7 @@ function Landing() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 px-4 py-10 text-center text-xs text-muted-foreground sm:px-6">
+      <footer className="footer-surface border-t border-border/60 px-4 py-10 text-center text-xs text-muted-foreground sm:px-6">
         <p>
           Laudemir Lemes, consultor licenciado iGreen Energy. Os valores apresentados são
           estimativas de economia potencial de até 20% sobre a parte de consumo da fatura e podem
@@ -481,12 +511,12 @@ function Landing() {
         href={whatsHref}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`Falar com ${CONSULTANT.nome} no WhatsApp`}
+        aria-label={`Falar com ${CONSULTANT.nome} pelo WhatsApp`}
         title="Falar no WhatsApp"
         onClick={() => track("WhatsAppClick", { origem: "botao_fixo_desktop" })}
-        className="glow-brand fixed right-6 bottom-6 z-40 hidden size-14 items-center justify-center rounded-full bg-brand text-primary-foreground transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand md:flex"
+        className="whatsapp-button fixed right-6 bottom-6 z-40 hidden size-14 items-center justify-center rounded-full text-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:flex"
       >
-        <MessageCircle className="size-6" />
+        <WhatsAppIcon className="size-7" />
       </a>
 
       {/* CTA STICKY MOBILE */}
@@ -495,12 +525,12 @@ function Landing() {
           href={whatsHref}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Falar com ${CONSULTANT.nome} no WhatsApp`}
+          aria-label={`Falar com ${CONSULTANT.nome} pelo WhatsApp`}
           title="Falar no WhatsApp"
           onClick={() => track("WhatsAppClick", { origem: "botao_fixo_mobile" })}
-          className="inline-flex size-12 shrink-0 items-center justify-center rounded-md border border-brand/40 bg-brand/10 text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="whatsapp-button inline-flex size-12 shrink-0 items-center justify-center rounded-md text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          <MessageCircle className="size-5" />
+          <WhatsAppIcon className="size-6" />
         </a>
         <Button className="h-12 min-w-0 flex-1 text-sm" onClick={() => abrir("sticky_mobile")}>
           <Zap className="size-4" /> Calcular minha economia
@@ -514,19 +544,28 @@ function Landing() {
 }
 
 function Section({
+  id,
+  tone = "plain",
   eyebrow,
   title,
   children,
 }: {
+  id?: string;
+  tone?: "plain" | "alternate";
   eyebrow: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <p className="text-xs tracking-widest text-brand uppercase">{eyebrow}</p>
-      <h2 className="mt-2 mb-8 max-w-2xl text-2xl font-bold sm:text-4xl">{title}</h2>
-      {children}
+    <section
+      id={id}
+      className={`section-band scroll-mt-20 border-t border-border/40 ${tone === "alternate" ? "section-band-alternate" : ""}`}
+    >
+      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16">
+        <p className="text-xs tracking-widest text-brand uppercase">{eyebrow}</p>
+        <h2 className="mt-2 mb-8 max-w-2xl text-2xl font-bold sm:text-4xl">{title}</h2>
+        {children}
+      </div>
     </section>
   );
 }

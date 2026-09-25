@@ -14,7 +14,7 @@ export function Simulator({ onCta }: { onCta: () => void }) {
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs tracking-widest text-brand uppercase">Simulador</p>
-          <h3 className="truncate text-xl font-semibold sm:text-2xl">Sua conta de luz hoje</h3>
+          <h3 className="text-lg font-semibold sm:text-2xl">Sua conta de luz hoje</h3>
         </div>
         <p className="shrink-0 text-2xl font-bold sm:text-3xl">
           {brl(valor)}
@@ -23,6 +23,7 @@ export function Simulator({ onCta }: { onCta: () => void }) {
       </div>
 
       <Slider
+        aria-label="Valor mensal da conta de luz"
         value={[valor]}
         min={100}
         max={3000}

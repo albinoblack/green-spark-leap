@@ -18,7 +18,6 @@ import {
   ClipboardList,
   ExternalLink,
   FileSignature,
-  Leaf,
   Mail,
   MessageCircle,
   ShieldCheck,
@@ -80,15 +79,19 @@ function Landing() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6">
           <div className="flex min-w-0 items-center gap-2.5">
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-brand/15 ring-1 ring-brand/30">
-              <Leaf className="size-5 text-brand" />
-            </span>
+            <img
+              src={CONSULTANT.foto}
+              alt=""
+              width="36"
+              height="36"
+              className="size-9 shrink-0 rounded-full border border-brand/30 object-cover object-top"
+            />
             <span className="min-w-0">
               <span className="block truncate font-display text-sm font-bold tracking-tight">
                 iGreen Energy
               </span>
               <span className="block truncate text-[11px] text-muted-foreground">
-                Consultor licenciado
+                Com Laudemir Lemes
               </span>
             </span>
           </div>
@@ -278,14 +281,14 @@ function Landing() {
 
       {/* CONSULTOR */}
       <Section eyebrow="Seu consultor" title="Fale diretamente com o Laudemir">
-        <div className="surface-card grid gap-6 rounded-2xl p-6 sm:p-9 md:grid-cols-[220px_minmax(0,1fr)]">
+        <div className="surface-card grid gap-6 rounded-2xl p-6 sm:p-9 md:grid-cols-[300px_minmax(0,1fr)] lg:grid-cols-[360px_minmax(0,1fr)]">
           <img
             src={CONSULTANT.foto}
             alt="Laudemir Lemes, consultor licenciado iGreen Energy"
-            width="220"
-            height="275"
+            width="360"
+            height="450"
             loading="lazy"
-            className="h-64 w-full rounded-lg object-cover object-[center_30%] md:h-[275px]"
+            className="h-[380px] w-full rounded-lg object-cover object-[center_30%] md:h-[420px] lg:h-[450px]"
           />
           <div className="min-w-0">
             <h3 className="text-xl font-semibold">{CONSULTANT.nome}</h3>
@@ -397,6 +400,29 @@ function Landing() {
               </a>
             </Button>
           </div>
+        </div>
+        <div className="mt-10 max-w-3xl">
+          <p className="text-xs font-semibold uppercase text-brand">Apresentação iGreen</p>
+          <h3 className="mt-2 text-xl font-semibold">Conheça a oportunidade de licenciamento</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Assista à apresentação sobre o modelo de atuação e converse com o Laudemir para tirar
+            suas dúvidas.
+          </p>
+          <video
+            controls
+            playsInline
+            preload="none"
+            poster="/images/igreen-licenciamento.jpg"
+            aria-label="Vídeo sobre a oportunidade de licenciamento iGreen"
+            className="mt-5 aspect-video w-full rounded-lg border border-border bg-black"
+          >
+            <source src="/videos/igreen-licenciamento.mp4" type="video/mp4" />
+            Seu navegador não suporta a reprodução deste vídeo.
+          </video>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Os exemplos de ganhos apresentados no vídeo não garantem resultados. Consulte as
+            condições oficiais atualizadas antes de se cadastrar.
+          </p>
         </div>
       </Section>
 

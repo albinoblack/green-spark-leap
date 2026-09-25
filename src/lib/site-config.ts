@@ -4,6 +4,7 @@
 
 /** WhatsApp do consultor (formato internacional, apenas dígitos) */
 export const CONSULTANT_WHATSAPP = "5512991771765";
+export const SITE_URL = "https://www.solucaoigreen.com.br/";
 
 export const CONSULTANT = {
   nome: "Laudemir Lemes",
@@ -27,11 +28,71 @@ export const LINKS = {
 /** Percentual máximo de economia potencial usado nas estimativas */
 export const MAX_ECONOMIA = 0.2;
 
+export const whatsappHref = (message: string) =>
+  `https://wa.me/${CONSULTANT_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+export const WHATSAPP_MESSAGES = {
+  geral: "Olá, Laudemir! Vi seu site e gostaria de conhecer as soluções iGreen para mim.",
+  oportunidade:
+    "Olá, Laudemir! Quero conhecer a oportunidade de atuação como licenciado iGreen. Pode me explicar os requisitos e as condições oficiais?",
+} as const;
+
+export const SOLUTIONS = [
+  {
+    id: "green",
+    name: "Conexão Green",
+    description: "Energia limpa por assinatura, sem instalar placas no imóvel.",
+    audience: "Para residências e pequenos negócios com conta elegível.",
+    imageSrc: null as string | null,
+    suggestedImagePath: "/images/products/conexao-green.webp",
+    directHref: LINKS.green,
+    directLabel: "Ir para adesão",
+    contactLabel: "Falar sobre Green",
+    message:
+      "Olá, Laudemir! Quero entender a Conexão Green e verificar se posso economizar na conta de luz.",
+  },
+  {
+    id: "solar",
+    name: "Energia solar com placas",
+    description: "Soluções de geração solar com painéis, distintas da assinatura Green.",
+    audience: "Para quem deseja avaliar um projeto com placas solares.",
+    imageSrc: null as string | null,
+    suggestedImagePath: "/images/products/energia-solar-placas.webp",
+    directHref: null,
+    directLabel: null,
+    contactLabel: "Falar sobre solar",
+    message: "Olá, Laudemir! Quero conhecer as opções iGreen de energia solar com placas.",
+  },
+  {
+    id: "telecom",
+    name: "iGreen Telecom",
+    description: "Planos de telefonia móvel e opção de portabilidade.",
+    audience: "Para quem quer conhecer opções de linha móvel ou portar seu número.",
+    imageSrc: null as string | null,
+    suggestedImagePath: "/images/products/igreen-telecom.webp",
+    directHref: LINKS.telecom,
+    directLabel: "Ver opções de telefonia",
+    contactLabel: "Falar sobre Telecom",
+    message:
+      "Olá, Laudemir! Quero saber mais sobre a iGreen Telecom e as opções de telefonia e portabilidade.",
+  },
+  {
+    id: "seguro",
+    name: "Seguro veicular",
+    description: "Solução de proteção veicular com cotação conforme o perfil.",
+    audience: "Para quem deseja consultar opções de seguro para seu veículo.",
+    imageSrc: null as string | null,
+    suggestedImagePath: "/images/products/seguro-veicular.webp",
+    directHref: LINKS.seguros,
+    directLabel: "Ir para cotação",
+    contactLabel: "Falar sobre seguro",
+    message: "Olá, Laudemir! Quero conhecer a solução de seguro veicular e solicitar uma cotação.",
+  },
+] as const;
+
 export const NUMEROS = [
-  { valor: "+1.000", label: "usinas solares em operação" },
-  { valor: "+30", label: "distribuidoras integradas" },
-  { valor: "RA1000", label: "reputação no Reclame Aqui" },
-  { valor: "GPTW", label: "certificação Great Place to Work" },
+  { valor: "+1.000", label: "usinas solares informadas pela iGreen" },
+  { valor: "+30", label: "distribuidoras informadas pela iGreen" },
 ];
 
 export const DISTRIBUIDORAS = ["EDP", "Enel", "CPFL", "Neoenergia", "Cemig", "Outra"];
@@ -73,7 +134,7 @@ export const FAQ = [
   },
   {
     q: "Preciso investir algum valor para começar?",
-    a: "Não há investimento inicial, taxa de adesão ou obra. Você continua recebendo energia normalmente e passa a pagar com desconto sobre a parte de consumo.",
+    a: "Na Conexão Green, não há instalação de equipamentos no imóvel. Confirme com o Laudemir as condições comerciais e contratuais vigentes para seu perfil antes de aderir.",
   },
   {
     q: "A economia de até 20% é garantida?",
@@ -81,7 +142,7 @@ export const FAQ = [
   },
   {
     q: "Minha instalação elétrica muda em algo?",
-    a: "Nada muda. Mesma rede, mesma distribuidora, mesma qualidade de fornecimento. Muda apenas a origem da energia e o valor da fatura.",
+    a: "Na Conexão Green, não é preciso alterar a instalação elétrica. O fornecimento segue pela distribuidora local; a compensação de créditos e o faturamento dependem das condições aplicáveis.",
   },
   {
     q: "Existe fidelidade ou multa?",

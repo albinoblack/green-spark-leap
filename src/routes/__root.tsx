@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { CONSULTANT, SITE_URL } from "@/lib/site-config";
 
 function NotFoundComponent() {
   return (
@@ -80,16 +81,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Conheça as soluções iGreen em energia, telefonia e seguro veicular com o consultor Laudemir Lemes.",
+          "Conheça a Conexão Green, energia solar com placas, iGreen Telecom, seguro veicular e a oportunidade de licenciamento com Laudemir Lemes.",
       },
       { property: "og:title", content: "Laudemir Lemes | Soluções iGreen Energy" },
       {
         property: "og:description",
         content:
-          "Economia na conta de luz e outras soluções iGreen com atendimento direto do Laudemir.",
+          "Soluções iGreen e oportunidade de licenciamento com atendimento direto de Laudemir Lemes.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:locale", content: "pt_BR" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: `${SITE_URL.replace(/\/$/, "")}${CONSULTANT.foto}` },
+      { property: "og:image:alt", content: "Laudemir Lemes, consultor licenciado iGreen Energy" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: [
       {
@@ -97,6 +102,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "canonical", href: SITE_URL },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
